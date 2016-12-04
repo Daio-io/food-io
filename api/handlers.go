@@ -7,7 +7,7 @@ import (
 
 func GetRecipes(ctx *iris.Context) {
 	limit, err := ctx.URLParamInt("limit")
-	with := ctx.URLParam("with")
+	q := ctx.URLParam("q")
 	if err != nil || limit > 100 {
 		limit = 100
 	}
@@ -20,7 +20,7 @@ func GetRecipes(ctx *iris.Context) {
 
 	model := []Result{}
 	col := session.Collection("recipes", model)
-	results, _ := col.Text(with, query)
+	results, _ := col.Text(q, query)
 
 	data := results.([]Result)
 
