@@ -8,7 +8,7 @@ import (
 func GetRecipes(ctx *iris.Context) {
 	limit, err := ctx.URLParamInt("limit")
 	with := ctx.URLParam("with")
-	if err != nil || limit > 100 {
+	if err != nil || limit > 500 {
 		limit = 100
 	}
 
