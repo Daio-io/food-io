@@ -8,6 +8,7 @@ type Result struct {
 	Title       string `json:"title" bson:"title"`
 	CookingTime string `json:"cookingTime" bson:"cookingTime"`
 	Servings    string `json:"servings" bson:"servingsText"`
+	Thumbnail   string `json:"thumbnail" bson:"thumbnail"`
 	Methods     []Method `json:"methods" bson:"methods"`
 	Stages      []Stage `json:"stages" bson:"stages"`
 }
@@ -17,6 +18,7 @@ type Method struct {
 }
 
 type Stage struct {
+	Title       string `json:"title" bson:"title"`
 	Ingredients []Ingredient `json:"ingredients" bson:"ingredients"`
 }
 

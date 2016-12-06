@@ -7,7 +7,7 @@ import (
 
 func GetRecipes(ctx *iris.Context) {
 	limit, err := ctx.URLParamInt("limit")
-	q := ctx.URLParam("q")
+	with := ctx.URLParam("with")
 	if err != nil || limit > 100 {
 		limit = 100
 	}
@@ -20,11 +20,23 @@ func GetRecipes(ctx *iris.Context) {
 
 	model := []Result{}
 	col := session.Collection("recipes", model)
-	results, _ := col.Text(q, query)
 
-	data := results.([]Result)
+	var results interface{}
+	var queryErr error
 
-	ctx.JSON(iris.StatusOK, data)
+	if with != "" {
+		results, queryErr = col.Text(with, query)
+	} else {
+		results, queryErr = col.Find(query)
+	}
+
+	if queryErr != nil {
+		ctx.JSON(iris.StatusBadRequest, Status{"Request Failed"})
+	} else {
+		data := results.([]Result)
+		ctx.JSON(iris.StatusOK, data)
+	}
+
 }
 
 func GetStatus(ctx *iris.Context){
