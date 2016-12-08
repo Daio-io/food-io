@@ -3,6 +3,8 @@ package api
 import (
 	"github.com/kataras/iris"
 	"foodio/db"
+	"time"
+	"math/rand"
 )
 
 func GetRecipes(ctx *iris.Context) {
@@ -34,11 +36,23 @@ func GetRecipes(ctx *iris.Context) {
 		ctx.JSON(iris.StatusBadRequest, Status{"Request Failed"})
 	} else {
 		data := results.([]Result)
-		ctx.JSON(iris.StatusOK, data)
+		ctx.JSON(iris.StatusOK, shuffle(data))
 	}
 
 }
 
 func GetStatus(ctx *iris.Context){
 	ctx.JSON(iris.StatusOK, Status{"OK"})
+}
+
+func shuffle(data []Result) []Result {
+	t := time.Now()
+	rand.Seed(int64(t.Nanosecond()))
+
+	for i := len(data) - 1; i > 0; i-- {
+		j := rand.Intn(i)
+		data[i], data[j] = data[j], data[i]
+	}
+
+	return data
 }
