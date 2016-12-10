@@ -1,10 +1,13 @@
 package api
 
+import "gopkg.in/mgo.v2/bson"
+
 type Status struct {
 	Status string `json:"status"`
 }
 
 type Result struct {
+	Id          bson.ObjectId `json:"id" bson:"_id"`
 	Title       string `json:"title" bson:"title"`
 	CookingTime string `json:"cookingTime" bson:"cookingTime"`
 	Servings    string `json:"servings" bson:"servingsText"`

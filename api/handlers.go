@@ -32,7 +32,7 @@ func GetRecipes(ctx *iris.Context) {
 		results, queryErr = col.Find(query)
 	}
 
-	if queryErr != nil {
+	if queryErr != nil || results == nil {
 		ctx.JSON(iris.StatusBadRequest, Status{"Request Failed"})
 	} else {
 		data := results.([]Result)
