@@ -5,11 +5,13 @@ import (
 	"foodio/db"
 	"time"
 	"math/rand"
+	"strings"
 )
 
 func GetRecipes(ctx *iris.Context) {
 	limit, err := ctx.URLParamInt("limit")
 	with := ctx.URLParam("with")
+	diets := strings.Split(ctx.URLParam("diets"), ",")
 	if err != nil || limit > 500 {
 		limit = 100
 	}
@@ -19,6 +21,7 @@ func GetRecipes(ctx *iris.Context) {
 
 	query := db.NewQuery()
 	query.Amount = limit
+	query.MultiFilter("diets.title", diets)
 
 	model := []Result{}
 	col := session.Collection("recipes", model)
@@ -41,7 +44,22 @@ func GetRecipes(ctx *iris.Context) {
 
 }
 
-func GetStatus(ctx *iris.Context){
+func GetDiets(ctx *iris.Context) {
+	model := []string{
+		"gluten-free",
+		"vegan",
+		"vegetarian",
+		"nut-free",
+		"egg-free",
+		"dairy-free",
+		"pregnancy-friendly",
+		"shellfish-free"}
+
+	result := map[string][]string{"diets": model}
+	ctx.JSON(iris.StatusOK, result)
+}
+
+func GetStatus(ctx *iris.Context) {
 	ctx.JSON(iris.StatusOK, Status{"OK"})
 }
 

@@ -14,6 +14,7 @@ type Result struct {
 	Thumbnail   string `json:"thumbnail" bson:"thumbnail"`
 	Methods     []Method `json:"methods" bson:"methods"`
 	Stages      []Stage `json:"stages" bson:"stages"`
+	Diets       []Diet    `json:"diets" bson:"diets"`
 }
 
 type Method struct {
@@ -31,5 +32,9 @@ type Ingredient struct {
 }
 
 type Food struct {
+	Title string `json:"title" bson:"title"`
+}
+
+type Diet struct {
 	Title string `json:"title" bson:"title"`
 }

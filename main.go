@@ -13,6 +13,7 @@ func main() {
 
 	app.Get("/status", api.GetStatus)
 	app.Get("/recipes", api.GetRecipes)
+	app.Get("/diets", api.GetDiets)
 
 	app.Listen(getPort())
 

@@ -15,7 +15,14 @@ type Collection struct {
 // Find - Return queried results list
 func (c *Collection) Find(options QueryOptions) (interface{}, error) {
 	modelType := reflect.New(reflect.TypeOf(c.model))
-	err := c.col.Find(options.GetFilters()).Limit(options.Amount).All(modelType.Interface())
+
+	query := bson.M{}
+
+	if len(options.GetFilters()) > 0 {
+		query["$and"] = options.GetFilters()
+	}
+
+	err := c.col.Find(query).Limit(options.Amount).All(modelType.Interface())
 	if err != nil {
 		return nil, err
 	}
@@ -26,6 +33,11 @@ func (c *Collection) Find(options QueryOptions) (interface{}, error) {
 func (c *Collection) Text(query string, options QueryOptions) (interface{}, error) {
 	modelType := reflect.New(reflect.TypeOf(c.model))
 	textSearch := bson.M{"$text": bson.M{"$search": query,  "$caseSensitive": false}}
+
+	if len(options.GetFilters()) > 0 {
+		textSearch["$and"] = options.GetFilters()
+	}
+
 	err := c.col.Find(textSearch).Limit(options.Amount).All(modelType.Interface())
 	if err != nil {
 		return nil, err
