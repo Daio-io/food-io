@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/kataras/iris"
-	"github.com/iris-contrib/middleware/logger"
 	"foodio/api"
 	"os"
+
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/middleware/logger"
 )
 
 func main() {
@@ -15,8 +16,7 @@ func main() {
 	app.Get("/recipes", api.GetRecipes)
 	app.Get("/diets", api.GetDiets)
 
-	app.Listen(getPort())
-
+	app.Run(iris.Addr(getPort()))
 }
 
 // GetPort - Get the port number set

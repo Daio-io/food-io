@@ -1,14 +1,16 @@
 package api
 
 import (
-	"github.com/kataras/iris"
-	"foodio/db"
 	"time"
 	"math/rand"
 	"strings"
+
+	"foodio/db"
+
+	"github.com/kataras/iris/v12"
 )
 
-func GetRecipes(ctx *iris.Context) {
+func GetRecipes(ctx iris.Context) {
 	limit, err := ctx.URLParamInt("limit")
 	with := ctx.URLParam("with")
 	diets := strings.Split(ctx.URLParam("diets"), ",")
@@ -36,15 +38,15 @@ func GetRecipes(ctx *iris.Context) {
 	}
 
 	if queryErr != nil || results == nil {
-		ctx.JSON(iris.StatusBadRequest, Status{"Request Failed"})
-	} else {
+		ctx.StatusCode(iris.StatusBadRequest)
+		ctx.JSON(Status{"Request Failed"})
+		return
+	} 
 		data := results.([]Result)
-		ctx.JSON(iris.StatusOK, shuffle(data))
-	}
-
+		ctx.JSON(shuffle(data))
 }
 
-func GetDiets(ctx *iris.Context) {
+func GetDiets(ctx iris.Context) {
 	model := []string{
 		"gluten-free",
 		"vegan",
@@ -56,11 +58,11 @@ func GetDiets(ctx *iris.Context) {
 		"shellfish-free"}
 
 	result := map[string][]string{"diets": model}
-	ctx.JSON(iris.StatusOK, result)
+	ctx.JSON(result)
 }
 
-func GetStatus(ctx *iris.Context) {
-	ctx.JSON(iris.StatusOK, Status{"OK"})
+func GetStatus(ctx iris.Context) {
+	ctx.JSON(Status{"OK"})
 }
 
 func shuffle(data []Result) []Result {
